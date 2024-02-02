@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 from numpy.typing import NDArray
 from .wfc_patterns import pattern_grid_to_tiles
-
 logger = logging.getLogger(__name__)
+from PIL import Image
 
 ## Helper functions
 RGB_CHANNELS = 3
@@ -468,7 +468,7 @@ def tile_grid_to_image(
     Takes a tile_grid and transforms it into an image, using the information
     in tile_catalog. We use tile_size to figure out the size the new image
     should be, and visualize for displaying partial tile patterns.
-    """
+    """    
     tile_dtype = next(iter(tile_catalog.values())).dtype
     new_img = np.zeros(
         (
@@ -485,7 +485,7 @@ def tile_grid_to_image(
     else:
         for i in range(tile_grid.shape[0]):
             for j in range(tile_grid.shape[1]):
-                tile = tile_grid[i, j]
+                tile = tile_grid[i, j]                    
                 for u in range(tile_size[0]):
                     for v in range(tile_size[1]):
                         pixel = [200, 0, 200]
@@ -503,12 +503,7 @@ def tile_grid_to_image(
                         # TODO: will need to change if using an image with more than 3 channels
                         new_img[
                             (i * tile_size[0]) + u, (j * tile_size[1]) + v
-                        ] = np.resize(
-                            pixel,
-                            new_img[
-                                (i * tile_size[0]) + u, (j * tile_size[1]) + v
-                            ].shape,
-                        )
+                        ] = np.resize(pixel, new_img[(i * tile_size[0]) + u, (j * tile_size[1]) + v].shape,)
     return new_img
 
 

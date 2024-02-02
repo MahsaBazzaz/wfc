@@ -100,11 +100,10 @@ def execute_wfc(
     log_stats_to_output: Optional[Callable[[Dict[str, Any], str], None]] = None,
     *,
     image: Optional[NDArray[np.integer]] = None,
+    output_destination : str
 ) -> NDArray[np.integer]:
     timecode = datetime.datetime.now().isoformat().replace(":", ".")
     time_begin = time.perf_counter()
-    output_destination = r"./output/"
-    input_folder = r"./images/samples/"
 
     rotations -= 1  # change to zero-based
 
@@ -128,8 +127,7 @@ def execute_wfc(
     if filename:
         if image is not None:
             raise TypeError("Only filename or image can be provided, not both.")
-        image = imageio.imread(input_folder + filename + ".png")[:, :, :3]  # TODO: handle alpha channels
-
+        image = imageio.imread(filename)[:, :, :3]  # TODO: handle alpha channels
     if image is None:
         raise TypeError("An image must be given.")
 
@@ -395,7 +393,7 @@ def execute_wfc(
                     solution_tile_grid,
                     tile_catalog,
                     (tile_size, tile_size),
-                    output_destination + filename + "_" + timecode + ".png",
+                    output_destination,
                 )
 
             time_solve_end = time.perf_counter()
